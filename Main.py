@@ -93,17 +93,20 @@ def main():
 
    #Step 9: Ask a question
    relevant_docs = retriever.get_relevant_documents(query)
+   #print(relevant_docs.page_content)
+   #print(relevant_docs.metadata)
    response = qa_chain.run(input_documents=relevant_docs, question=query)
 
    #Print the Answer
    PROMPT_TEMPLATE = """
    The answer of the question : {question}
    is  {answer} 
+   it got the content from page number {page_number}
    """
 
    #context_text ="\n\n ---- \n\n".join([doc.page_content for doc,_score in relevant_docs])
    prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-   prompt = prompt_template.format(question=query,answer=response)
+   prompt = prompt_template.format(question=query,answer=response,page_number=relevant_docs.page_content)
    print(prompt)
 
    #print(f'The answer is {response}')
